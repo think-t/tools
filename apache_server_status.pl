@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 # Author  : think-t
-# Blog    : http://d.hatena.ne.jp/think-t
+# Blog    : http://think-t.hatenablog.com
 
 use warnings;
 use strict;

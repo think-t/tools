@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>Downtime List</title>
+</head>
+<body>
+<table border="1" cellpadding="5" cellspacing="0">
+<tr>
+  <th>Monitor Server</th>
+  <th>Host Name</th>
+  <th>Service Description</th>
+  <th>Downtime start</th>
+  <th>Downtime end</th>
+</tr>
+#for $downtime in $downtimes
+<tr>
+  <td>$downtime['monitor_host_name']</td>
+  <td>$downtime['host_name']</td>
+  <td>$downtime['service_description']</td>
+  <td>$downtime['start_time']</td>
+  <td>$downtime['end_time']</td>
+</tr>
+#end for
+</table>
+</body>
+</html>
