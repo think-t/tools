@@ -39,9 +39,9 @@ for row in reader:
 
   if sudo == 'true':
     sudo_config = user + "    ALL=(ALL)    NOPASSWD: ALL\n"
-    record = { "id":user, "uid":uid, "gid":gid, "home":home, "shell":shell, "password":password_hash, "ssh-key":authorized_keys, "sudo":sudo_config } 
+    record = { "id":user, "uid":uid, "gid":gid, "home":home, "shell":shell, "password":password_hash, "authorized_keys":authorized_keys, "sudo":sudo_config } 
   else:
-    record = { "id":user, "uid":uid, "gid":gid, "home":home, "shell":shell, "password":password_hash, "ssh-key":authorized_keys } 
+    record = { "id":user, "uid":uid, "gid":gid, "home":home, "shell":shell, "password":password_hash, "authorized_keys":authorized_keys } 
 
   jsonfile = codecs.open(user + ".json", "w", "utf-8")
-  json.dump(record, jsonfile, sort_keys=False, ensure_ascii=False)
+  json.dump(record, jsonfile, sort_keys=True, ensure_ascii=False, indent=2)
