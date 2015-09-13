@@ -10,7 +10,7 @@ secret_key = <designate your aws secret key>
 
 header = "security_group_id,security_group_name,mode,protocol,range,from_port,to_port"
 
-def format_security_group_rule(mode, rule_set):
+def __format_security_group_rule(mode, rule_set):
   rule_list = []
   for rule in rule_set:
     range     = str(rule.grants[0])
@@ -36,7 +36,7 @@ def format_security_group_rule(mode, rule_set):
 
   return rule_list
 
-def format_security_group(security_group_id, security_group_name, ingress_rules, egress_rules):
+def __format_security_group(security_group_id, security_group_name, ingress_rules, egress_rules):
   rule_set = []
 
   if len(ingress_rules) >= 1:
@@ -56,9 +56,9 @@ security_groups  = connection.get_all_security_groups()
 
 sg_result = {}
 for security_group in security_groups:
-  ingress_rules = format_security_group_rule('ingress', security_group.rules)
-  egress_rules  = format_security_group_rule('egress', security_group.rules_egress)
-  sg_result[security_group.id] = format_security_group(security_group.id, security_group.name, ingress_rules, egress_rules)
+  ingress_rules = __format_security_group_rule('ingress', security_group.rules)
+  egress_rules  = __format_security_group_rule('egress', security_group.rules_egress)
+  sg_result[security_group.id] = __format_security_group(security_group.id, security_group.name, ingress_rules, egress_rules)
 
 print header
 for key in sorted(sg_result.keys()):
