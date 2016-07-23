@@ -2,11 +2,17 @@
 # -*- coding: utf-8 -*-
 
 import boto3
+import argparse
 
-access_key = <Your Access Key>
-secret_key = <Your Secret Key>
-region     = <Your Region>
-vpcs       = [ <Your VPC Id> ]
+parser = argparse.ArgumentParser(description='aws ec2 instance listing tools.')
+parser.add_argument('--region',  action='store',  help='region help')
+parser.add_argument('--profile', action='store',  help='profile help')
+parser.add_argument('--vpcs',    action='append', help='vpcs help')
+args = parser.parse_args()
+
+region  = args.region
+profile = args.profile
+vpcs    = args.vpcs
 
 header = "security_group_id,security_group_name,mode,protocol,range,from_port,to_port"
 
@@ -54,7 +60,8 @@ def __format_security_group_rule(mode, security_group):
 
   return rule_list
 
-client = boto3.client('ec2', region_name = region, aws_access_key_id = access_key, aws_secret_access_key = secret_key)
+session = boto3.session.Session(profile_name = profile, region_name = region)
+client = session.client('ec2')
 response = client.describe_security_groups(
   Filters=[
     {
