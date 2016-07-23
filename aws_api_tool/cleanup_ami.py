@@ -24,6 +24,19 @@ def __print_image_info(image_info):
     for snapshot_id in image_info[image_id]:
       print "  snapshotid : " + snapshot_id
 
+def __delete_image(image_info):
+  for ami in image_info.keys():
+    ec2 = boto3.resource('ec2')
+    image = ec2.Image(ami)
+    print "delete : " + ami
+    image.deregister(DryRun=False)
+
+    snapshot_list = image_info[ami]
+    for snapshot_id in snapshot_list:
+      snapshot = ec2.Snapshot(snapshot_id)
+      print "  delete : " + snapshot_id
+      snapshot.delete(DryRun=False)
+
 parser = argparse.ArgumentParser(description='aws ami delete tool.')
 group  = parser.add_mutually_exclusive_group()
 group.add_argument('--image_id', action='append', help='Remove the specified AMI')
@@ -48,29 +61,18 @@ if args.image_ids_file != None:
     image_ids_file = args.image_ids_file
     yaml_data      = yaml.load(open(image_ids_file, 'r'))
     image_ids_yaml = yaml_data['image_ids']
-    image_ids = image_ids_yaml
+    image_ids      = image_ids_yaml
   else:
     print "Error : image_ids_file is not found."
     sys.exit(1)
 
 session = boto3.session.Session(profile_name = profile, region_name = region)
 client = session.client('ec2')
-images = client.describe_images(DryRun=False, ImageIds=image_ids, Owners=owners)
+images = client.describe_images(DryRun = False, ImageIds = image_ids, Owners = owners)
 
 if dry_run:
   image_info = __format_image_info(images)
   __print_image_info(image_info)
 else:
   image_info = __format_image_info(images)
-
-  for ami in image_info.keys():
-    ec2 = boto3.resource('ec2')
-    image = ec2.Image(ami)
-    print "delete : " + ami
-    image.deregister(DryRun=False)
-
-    snapshot_list = image_info[ami]
-    for snapshot_id in snapshot_list:
-      snapshot = ec2.Snapshot(snapshot_id)
-      print "  delete : " + snapshot_id
-      snapshot.delete(DryRun=False)
+  __delete_image(image_info)
