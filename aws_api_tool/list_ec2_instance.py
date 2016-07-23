@@ -4,7 +4,6 @@
 import boto3
 import os
 import argparse
-import ConfigParser
 
 parser = argparse.ArgumentParser(description='aws ec2 instance listing tools.')
 parser.add_argument('--region', action='store', help='region help')
@@ -14,16 +13,8 @@ args = parser.parse_args()
 profile = args.profile
 region = args.region
 
-home = os.environ.get('HOME')
-credentials = home + '/.aws/credentials'
-
-key_pair = ConfigParser.SafeConfigParser() 
-key_pair.read(credentials)
-
-access_key = key_pair.get(profile, 'aws_access_key_id')
-secret_key = key_pair.get(profile, 'aws_secret_access_key')
-
-client = boto3.client('ec2', region_name = region, aws_access_key_id = access_key, aws_secret_access_key = secret_key)
+session = boto3.session.Session(profile_name = profile, region_name = region)
+client = session.client('ec2')
 
 response = client.describe_instances()
 
