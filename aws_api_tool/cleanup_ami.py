@@ -24,16 +24,18 @@ def __print_image_info(image_info):
     for snapshot_id in image_info[image_id]:
       print "  snapshotid : " + snapshot_id
 
-parser = argparse.ArgumentParser(description='aws ami listing tools.')
+parser = argparse.ArgumentParser(description='aws ami delete tool.')
+group  = parser.add_mutually_exclusive_group()
+group.add_argument('--image_id', action='append', help='Remove the specified AMI')
+group.add_argument('--image_ids_file', action='store', help='The file you specify the AMI to be deleted. File format is YAML. And Key is \'image_ids\'')
 parser.add_argument('--dry_run', dest='dry_run', action='store_true', help='dry_run help')
-parser.add_argument('--owner', action='append', default=['self'], help='owner help')
-parser.add_argument('--image_id', action='append', help='image_id help')
-parser.add_argument('--image_ids_file', action='store', help='image_ids_file help')
-parser.add_argument('--profile', action='store', help='profile help')
-parser.add_argument('--region', action='store', help='region help')
+parser.add_argument('--owner', action='append', default=['self'], help='Choose aws\'s owner. Default value is \'self\'')
+parser.add_argument('--profile', action='store', help='Choose aws\'s user profile. This option is not necessary, Once you have set the configuration of awscli(The tool choose default profile)')
+parser.add_argument('--region', action='store', help='Choose aws\'s region. This option is not necessary, Once you have set the configuration of awscli(The tool choose default region)')
 args = parser.parse_args()
 
 dry_run = args.dry_run
+owners  = args.owner
 profile = args.profile
 region  = args.region
 
