@@ -12,7 +12,7 @@ args = parser.parse_args()
 
 region  = args.region
 profile = args.profile
-vpcs    = args.vpcs
+vpcs    = args.vpc_id
 
 header = "security_group_id,security_group_name,mode,protocol,range,from_port,to_port"
 
