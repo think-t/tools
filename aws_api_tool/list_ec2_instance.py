@@ -7,7 +7,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description='aws ec2 instance listing tools.')
 parser.add_argument('--region', action='store', help='Choose aws\'s region. This option is not necessary, Once you have set the configuration of awscli(The tool choose default region)')
-parser.add_argument('--profile', action='store', help='choose aws\'s user profile. This option is not necessary, Once you have set the configuration of awscli(The tool choose default profile)')
+parser.add_argument('--profile', action='store', help='Choose aws\'s user profile. This option is not necessary, Once you have set the configuration of awscli(The tool choose default profile)')
 args = parser.parse_args()
 
 profile = args.profile
