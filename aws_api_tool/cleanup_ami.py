@@ -25,13 +25,17 @@ def __print_image_info(image_info):
       print "  snapshotid : " + snapshot_id
 
 parser = argparse.ArgumentParser(description='aws ami listing tools.')
-parser.add_argument('--dry_run', dest='dry_run', action='store_true', help='dry_run help')
-parser.add_argument('--owner', action='append', help='owner help')
-parser.add_argument('--image_id', action='append', help='image_id help')
-parser.add_argument('--image_ids_file', action='store', help='image_ids_file help')
+parser.add_argument('--dry_run',        dest='dry_run',  action='store_true', help='dry_run help')
+parser.add_argument('--owner',          action='append', help='owner help')
+parser.add_argument('--image_id',       action='append', help='image_id help')
+parser.add_argument('--image_ids_file', action='store',  help='image_ids_file help')
+parser.add_argument('--profile',        action='store',  help='profile help')
+parser.add_argument('--region',         action='store',  help='region help')
 args = parser.parse_args()
 
 dry_run = args.dry_run
+profile = args.profile
+region  = args.region
 
 if args.owner != None:
   owners = args.owner
@@ -52,7 +56,8 @@ if args.image_ids_file != None:
     print "Error : image_ids_file is not found."
     sys.exit(1)
 
-client = boto3.client('ec2')
+session = boto3.session.Session(profile_name = profile, region_name = region)
+client = session.client('ec2')
 images = client.describe_images(DryRun=False, ImageIds=image_ids, Owners=owners)
 
 if dry_run:
